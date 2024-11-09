@@ -11,11 +11,12 @@ Green = 3;
 Blue = 2;
 
 startColor = Yellow;
-pickupColor = Green;
-endColor = Blue;
+pickupColor = Blue;
+endColor = Green;
 
 threshold = 35;
-sideThreshold = 100;
+sideThreshold = 150;
+turnThreshold = 75;
 
 turningSpeed = 0.65;
 forwardSpeed = 0.65;
@@ -86,8 +87,9 @@ while 1
                         end
                     end
 
-                    if(distance > sideThreshold  && leftTurns1 == 0)
-                        if (startColor == 4 && pickupColor == 2)
+                    if(distance > sideThreshold)
+
+                        if (startColor == 4 && pickupColor == 2 && leftTurns1 == 0)
                             brick.MoveMotor('A', -rightSpeed);
                             brick.MoveMotor('D', -leftSpeed);
                             pause(forwardSpeed);
@@ -97,7 +99,7 @@ while 1
                             pause(turningSpeed);   
     
                             leftTurns1 = leftTurns1 + 1;
-                        elseif (startColor == 2  && pickupColor ~= 3)
+                        elseif (startColor == 2  && pickupColor ~= 3 && leftTurns1 == 0)
                             brick.MoveMotor('A', -rightSpeed);
                             brick.MoveMotor('D', -leftSpeed);
                             pause(forwardSpeed);
@@ -107,7 +109,7 @@ while 1
                             pause(turningSpeed);
     
                             leftTurns1 = leftTurns1 + 1; 
-                        elseif (startColor == 3)
+                        elseif (startColor == 3 && leftTurns1 == 0)
                             brick.MoveMotor('A', -rightSpeed);
                             brick.MoveMotor('D', -leftSpeed);
                             pause(forwardSpeed);
@@ -173,7 +175,25 @@ while 1
                             brick.MoveMotor('D', leftSpeed);
                             pause(turningSpeed);
                         end
-                     else
+                    elseif (distance > sideThreshold && endColor == 2)
+                        brick.MoveMotor('A', -rightSpeed);
+                        brick.MoveMotor('D', -leftSpeed);
+                        pause(forwardSpeed);
+
+                        brick.MoveMotor('A', -rightSpeed);
+                        brick.MoveMotor('D', leftSpeed);
+                        pause(turningSpeed);
+                    elseif (distance > turnThreshold && endColor == 4 && leftTurns2 == 0)
+                        brick.MoveMotor('A', -rightSpeed);
+                        brick.MoveMotor('D', -leftSpeed);
+                        pause(forwardSpeed);
+
+                        brick.MoveMotor('A', rightSpeed);
+                        brick.MoveMotor('D', -leftSpeed);
+                        pause(turningSpeed);
+
+                        leftTurns2 = leftTurns2 + 1;
+                    else
                         touch = brick.TouchPressed(2);
     
                         if(touch)
@@ -184,30 +204,6 @@ while 1
                             brick.MoveMotor('A', rightSpeed);
                             brick.MoveMotor('D', -leftSpeed + 5);
                             pause(turningSpeed);
-                        end
-                    end
-                        
-                    if(distance > sideThreshold && leftTurns2 == 0)
-                        if (endColor == 2)
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(forwardSpeed);
-    
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(turningSpeed);
-                            
-                            leftTurns2 = leftTurns2 + 1;
-                        elseif (endColor == 4)
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(forwardSpeed);
-    
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(turningSpeed);
-    
-                            leftTurns2 = leftTurns2 + 1;
                         end
                     end
                  end
