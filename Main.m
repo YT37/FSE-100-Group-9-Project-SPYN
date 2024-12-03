@@ -6,16 +6,8 @@ brick.SetColorMode(1, 2);
 
 startMoving = 0;
 
-Yellow = 4;
-Green = 3;
-Blue = 2;
-
-startColor = Yellow;
-pickupColor = Green;
-endColor = Blue;
-
-threshold = 35;
-sideThreshold = 100;
+threshold = 37;
+sideThreshold = 75;
 
 turningSpeed = 0.65;
 forwardSpeed = 0.65;
@@ -23,10 +15,16 @@ forwardSpeed = 0.65;
 rightSpeed = 50;
 leftSpeed = 50;
 
-leftTurns1 = 0;
-leftTurns2 = 0;
+Yellow = 4;
+Green = 3;
+Blue = 2;
 
-while 1
+startColor = Blue;
+pickupColor = Green;
+endColor = Yellow;
+
+
+while true
     pause(0.1);
 
     switch key
@@ -39,96 +37,9 @@ while 1
             end
 
             while(startMoving == 1)
-                while(color ~= pickupColor)
-                    color = brick.ColorCode(1);
-                    distance = brick.UltrasonicDist(3);
-                    
-                    brick.MoveMotor('A', -rightSpeed);
-                    brick.MoveMotor('D', -leftSpeed);
-
-                    if(color == 5)
-                       brick.StopMotor('A'); 
-                       brick.StopMotor('D'); 
-
-                       brick.playTone(100, 800, 500);
-                       pause(0.75);
-                       brick.playTone(100, 800, 500); 
-                       pause(1);
-
-                       brick.MoveMotor('A', -250);
-                       brick.MoveMotor('D', -250);
-                    end
-
-                    if(distance <= threshold)
-                        touch = brick.TouchPressed(2);
+                auto(brick, pickupColor, threshold, sideThreshold, rightSpeed, leftSpeed, turningSpeed, forwardSpeed);
     
-                        if(touch)
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(forwardSpeed);
-                            
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(turningSpeed);
-                        end
-                   
-                    else
-                        touch = brick.TouchPressed(2);
-    
-                        if(touch)
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(forwardSpeed);
-                            
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(turningSpeed);
-                        end
-                    end
-
-                    if(distance > sideThreshold  && leftTurns1 == 0)
-                        if (startColor == 4 && pickupColor == 2)
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(forwardSpeed);
-    
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(turningSpeed);   
-    
-                            leftTurns1 = leftTurns1 + 1;
-                        elseif (startColor == 2  && pickupColor ~= 3)
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(forwardSpeed);
-    
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed + 5);
-                            pause(turningSpeed);
-    
-                            leftTurns1 = leftTurns1 + 1; 
-                        elseif (startColor == 3)
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(forwardSpeed);
-    
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed + 5);
-                            pause(turningSpeed);
-    
-                            leftTurns1 = leftTurns1 + 1;
-                        end
-                    end
-                 end
-    
-                brick.StopMotor('A'); 
-                brick.StopMotor('D'); 
-    
-                brick.playTone(100, 800, 500);
-                pause(0.75);
-                brick.playTone(100, 800, 500);
-                pause(1);
-    
+                stop(brick);
                 startMoving = 0;
             end
 
@@ -141,85 +52,9 @@ while 1
             end
 
             while(startMoving == 1)
-                while(color ~= endColor)
-                    color = brick.ColorCode(1);
-                    distance = brick.UltrasonicDist(3);
-                    
-                    brick.MoveMotor('A', -rightSpeed);
-                    brick.MoveMotor('D', -leftSpeed);
-
-                    if(color == 5)
-                       brick.StopMotor('A'); 
-                       brick.StopMotor('D'); 
-
-                       brick.playTone(100, 800, 500);
-                       pause(0.75);
-                       brick.playTone(100, 800, 500); 
-                       pause(1);
-
-                       brick.MoveMotor('A', -250);
-                       brick.MoveMotor('D', -250);
-                    end
-
-                    if(distance <= threshold)
-                        touch = brick.TouchPressed(2);
+                auto(brick, endColor, threshold, sideThreshold, rightSpeed, leftSpeed, turningSpeed, forwardSpeed);
     
-                        if(touch)
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(forwardSpeed);
-                            
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(turningSpeed);
-                        end
-                     else
-                        touch = brick.TouchPressed(2);
-    
-                        if(touch)
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(forwardSpeed);
-                            
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed + 5);
-                            pause(turningSpeed);
-                        end
-                    end
-                        
-                    if(distance > sideThreshold && leftTurns2 == 0)
-                        if (endColor == 2)
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(forwardSpeed);
-    
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', leftSpeed);
-                            pause(turningSpeed);
-                            
-                            leftTurns2 = leftTurns2 + 1;
-                        elseif (endColor == 4)
-                            brick.MoveMotor('A', -rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(forwardSpeed);
-    
-                            brick.MoveMotor('A', rightSpeed);
-                            brick.MoveMotor('D', -leftSpeed);
-                            pause(turningSpeed);
-    
-                            leftTurns2 = leftTurns2 + 1;
-                        end
-                    end
-                 end
-    
-                brick.StopMotor('A'); 
-                brick.StopMotor('D'); 
-    
-                brick.playTone(100, 800, 500);
-                pause(0.75);
-                brick.playTone(100, 800, 500);
-                pause(1);
-    
+                stop(brick);
                 startMoving = 0;
             end
         case 'h'
@@ -264,3 +99,75 @@ while 1
 end
 
 CloseKeyboard();
+
+function auto(brick, endColor, threshold, sideThreshold, rightSpeed, leftSpeed, turningSpeed, forwardSpeed)
+  color = brick.ColorCode(1);
+
+    while(color ~= endColor)
+        color = brick.ColorCode(1);
+        distance = brick.UltrasonicDist(3);
+        
+        brick.MoveMotor('A', -rightSpeed);
+        brick.MoveMotor('D', -leftSpeed);
+    
+        if(color == 5)
+           brick.StopMotor('A'); 
+           brick.StopMotor('D'); 
+    
+           brick.playTone(100, 800, 500);
+           pause(0.75);
+           brick.playTone(100, 800, 500); 
+           pause(1);
+    
+           brick.MoveMotor('A', -250);
+           brick.MoveMotor('D', -250);
+        end
+    
+        if(distance >= sideThreshold)
+            brick.MoveMotor('A', rightSpeed);
+            brick.MoveMotor('D', -leftSpeed);
+            pause(turningSpeed - 0.2);
+    
+            brick.MoveMotor('A', -rightSpeed);
+            brick.MoveMotor('D', -leftSpeed);
+            pause(forwardSpeed + 0.25);
+        end
+    
+        if(distance <= threshold)
+            touch = brick.TouchPressed(2);
+    
+            if(touch)
+                brick.MoveMotor('A', rightSpeed);
+                brick.MoveMotor('D', leftSpeed);
+                pause(forwardSpeed);
+                
+                brick.MoveMotor('A', -rightSpeed);
+                brick.MoveMotor('D', leftSpeed);
+                pause(turningSpeed);
+            end
+       
+        else
+            touch = brick.TouchPressed(2);
+    
+            if(touch)
+                brick.MoveMotor('A', rightSpeed);
+                brick.MoveMotor('D', leftSpeed);
+                pause(forwardSpeed);
+                
+                brick.MoveMotor('A', rightSpeed);
+                brick.MoveMotor('D', -leftSpeed);
+                pause(turningSpeed);
+            end
+        end
+    end
+end
+
+function stop(brick) 
+    brick.StopMotor('A'); 
+    brick.StopMotor('D'); 
+    
+    brick.playTone(100, 800, 500);
+    pause(0.75);
+    brick.playTone(100, 800, 500);
+    pause(1);
+end
